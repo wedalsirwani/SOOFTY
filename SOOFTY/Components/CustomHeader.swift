@@ -29,7 +29,7 @@ struct CustomHeader: View {
 
             VStack(alignment: .leading, spacing: 0) {
                 HStack(spacing: 18) {
-                    Button {
+                    /*Button {
                         dismiss()
                     } label: {
                         Image(systemName: "chevron.left")
@@ -38,7 +38,7 @@ struct CustomHeader: View {
                             .frame(width: 48, height: 48)
                             .background(.white.opacity(0.85))
                             .clipShape(Circle())
-                    }
+                    }*/
 
                     Text(title)
                         .font(.system(size: 18))

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="402px" height="645px" viewBox="0 0 402 645" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>Path 4</title>
+    <defs>
+        <linearGradient x1="50%" y1="0%" x2="50%" y2="100%" id="linearGradient-1">
+            <stop stop-color="#F5F6FF" offset="0%"></stop>
+            <stop stop-color="#E8E9FF" offset="100%"></stop>
+        </linearGradient>
+    </defs>
+    <g id="Approved" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Rewards" transform="translate(0, -229)" fill="url(#linearGradient-1)">
+            <path d="M-90.5345932,801.594143 C17.740262,863.600622 107.838041,894.603861 179.758744,894.603861 C287.639799,894.603861 392.583592,780.90662 538.222042,780.90662 C683.860493,780.90662 738.405705,869.174553 827.465407,923.621821 L827.465407,237.621821 L-90.5345932,237.621821 L-90.5345932,801.594143 Z" id="Path-4" transform="translate(368.4654, 580.6218) rotate(181) translate(-368.4654, -580.6218)"></path>
+        </g>
+    </g>
+</svg>

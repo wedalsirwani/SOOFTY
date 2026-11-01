@@ -1,3 +1,4 @@
+
 import SwiftUI
 
 struct MainPage2r: View {
@@ -6,7 +7,6 @@ struct MainPage2r: View {
 
     @State private var showTimeManagementGame = false
     @State private var showCriticalThinkingGame = false
-    @State private var showAchievements = false
 
     // MARK: - Shared Progress
 
@@ -24,22 +24,25 @@ struct MainPage2r: View {
         blue: 1.0
     )
 
+    // Green - Time Management
     private let timeColor = Color(
-        red: 0.72,
-        green: 0.76,
-        blue: 1.0
+        red: 182.0 / 255.0,
+        green: 223.0 / 255.0,
+        blue: 141.0 / 255.0
     )
 
+    // Orange - Critical Thinking
     private let thinkingColor = Color(
         red: 0.97,
         green: 0.56,
         blue: 0.23
     )
 
+    // Purple - Memory Cards
     private let memoryColor = Color(
-        red: 0.76,
-        green: 0.91,
-        blue: 0.61
+        red: 0.57,
+        green: 0.57,
+        blue: 1.0
     )
 
     // MARK: - Main Page
@@ -225,60 +228,6 @@ struct MainPage2r: View {
                             .padding(.horizontal, 29)
                             .padding(.top, 20)
 
-                        // MARK: - Achievements Button
-
-                        Button {
-
-                            showAchievements = true
-
-                        } label: {
-
-                            HStack(spacing: 12) {
-
-                                Image(systemName: "trophy.fill")
-                                    .font(.system(size: 22))
-
-                                VStack(
-                                    alignment: .leading,
-                                    spacing: 4
-                                ) {
-
-                                    Text("Achievements")
-                                        .font(
-                                            .system(
-                                                size: 17,
-                                                weight: .semibold
-                                            )
-                                        )
-
-                                    Text(
-                                        "\(gameProgress.unlockedAchievements.count) unlocked"
-                                    )
-                                    .font(.system(size: 13))
-                                    .opacity(0.85)
-                                }
-
-                                Spacer()
-
-                                Image(systemName: "chevron.right")
-                                    .font(
-                                        .system(
-                                            size: 14,
-                                            weight: .semibold
-                                        )
-                                    )
-                            }
-                            .foregroundStyle(purple)
-                            .padding(18)
-                            .background(
-                                RoundedRectangle(cornerRadius: 22)
-                                    .fill(purple.opacity(0.08))
-                            )
-                        }
-                        .buttonStyle(.plain)
-                        .padding(.horizontal, 29)
-                        .padding(.top, 14)
-
                         // MARK: - Skills Heading
 
                         Text("Skills Cards")
@@ -303,20 +252,16 @@ struct MainPage2r: View {
 
                         VStack(spacing: 14) {
 
-                            // Memory Cards
+                            // Memory Cards - Purple
 
                             skillCard(
                                 title: "Memory Cards",
                                 icon: "brain",
-                                color: Color(
-                                    red: 0.57,
-                                    green: 0.57,
-                                    blue: 1.0
-                                ),
+                                color: memoryColor,
                                 height: cardHeight
                             )
 
-                            // Critical Thinking
+                            // Critical Thinking - Orange
 
                             Button {
 
@@ -358,7 +303,7 @@ struct MainPage2r: View {
                             }
                             .buttonStyle(.plain)
 
-                            // Time Management
+                            // Time Management - Green
 
                             Button {
 
@@ -395,13 +340,7 @@ struct MainPage2r: View {
                                 .frame(height: cardHeight)
                                 .background(
                                     RoundedRectangle(cornerRadius: 30)
-                                        .fill(
-                                            Color(
-                                                red: 182.0 / 255.0,
-                                                green: 223.0 / 255.0,
-                                                blue: 141.0 / 255.0
-                                            )
-                                        )
+                                        .fill(timeColor)
                                 )
                             }
                             .buttonStyle(.plain)
@@ -451,7 +390,6 @@ struct MainPage2r: View {
 
                     print("Time Management earned: \(earnedProgress)")
 
-                    // Update the shared GameProgress instance directly.
                     GameProgress.shared.completeTimeManagementGame(
                         earnedProgress: earnedProgress
                     )
@@ -464,15 +402,6 @@ struct MainPage2r: View {
                         "Updated Overall Progress: \(GameProgress.shared.overallProgress * 100)%"
                     )
                 }
-            )
-        }
-
-        // MARK: - Present Achievements
-
-        .sheet(isPresented: $showAchievements) {
-
-            AchievementsPage(
-                gameProgress: gameProgress
             )
         }
 

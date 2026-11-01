@@ -359,9 +359,9 @@ struct MainPage2r: View {
             .navigationBarBackButtonHidden(true)
         }
 
-        // MARK: - Present Critical Thinking Game
+        // MARK: - Present Critical Thinking Game (FULL SCREEN)
 
-        .sheet(isPresented: $showCriticalThinkingGame) {
+        .fullScreenCover(isPresented: $showCriticalThinkingGame) {
 
             CriticalThinkingGamePage(
                 onGameCompleted: { earnedProgress in
@@ -381,7 +381,7 @@ struct MainPage2r: View {
             )
         }
 
-        // MARK: - Present Time Management Puzzle
+        // MARK: - Present Time Management Puzzle (FULL SCREEN)
 
         .fullScreenCover(isPresented: $showTimeManagementGame) {
 

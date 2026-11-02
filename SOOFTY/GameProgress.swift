@@ -72,6 +72,26 @@ final class GameProgress: ObservableObject {
         checkAchievements()
         saveData()
     }
+    
+    // MARK: - Complete Memory Cards Game
+
+    func completeMemoryGame(earnedProgress: Double) {
+
+        guard earnedProgress > 0 else {
+            return
+        }
+
+        memoryProgress = min(
+            memoryProgress + earnedProgress,
+            1.0
+        )
+
+        completedGames += 1
+        recordPlayToday()
+        checkAchievements()
+        saveData()
+    }
+    
     // MARK: - Complete Time Management Game
 
     func completeTimeManagementGame(earnedProgress: Double) {

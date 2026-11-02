@@ -299,8 +299,9 @@ struct MainPage2r: View {
         // MARK: - Present Memory Cards Game (FULL SCREEN)
 
         .fullScreenCover(isPresented: $showMemoryGame) {
-
-            MemoryGameScreen()
+            MemoryGameScreen(onGameCompleted: { earnedProgress in
+                gameProgress.completeMemoryGame(earnedProgress: earnedProgress)
+            })
         }
 
         // MARK: - Present Critical Thinking Game (FULL SCREEN)
@@ -362,13 +363,7 @@ struct MainPage2r: View {
         ZStack {
 
             Circle()
-                .stroke(
-                    Color.white.opacity(0.28),
-                    style: StrokeStyle(
-                        lineWidth: lineWidth,
-                        lineCap: .round
-                    )
-                )
+                .stroke(Color.white.opacity(0.1), lineWidth: lineWidth)
 
             Circle()
                 .trim(

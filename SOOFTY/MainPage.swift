@@ -1,36 +1,44 @@
-//
-//  Main.swift
-//  SOOFTY
-//
-//  Created by Reema Mohammed Abdulaziz Alzannan on 11/05/1448 AH.
-//
-
 
 import SwiftUI
 
 struct MainPage: View {
+
+    // MARK: - Navigation
+
+    @State private var showMemoryGame = false
+    @State private var showCriticalThinkingGame = false
+    @State private var showTimeManagementGame = false
+
+    // MARK: - Shared Progress
+
+    @StateObject private var gameProgress = GameProgress.shared
+
     @State private var score = 0
     @State private var selectedSkill = ""
     @State private var showAlert = false
-    
+
     private let purple = Color(
         red: 0.37, green: 0.38, blue: 1.0
     )
-    
+
     var body: some View {
+
         GeometryReader { geometry in
-            
+
             let screenHeight = geometry.size.height
             let cardHeight = min(max(screenHeight * 0.115, 100), 100)
+
             ZStack(alignment: .top) {
+
                 VStack(spacing: 0) {
+
                     CustomHeader(
                         title: "",
                         subtitle: ""
                     )
                     .ignoresSafeArea(edges: .top)
-                    
                 }
+
                 // MARK: Main Content
 
                 ScrollView(showsIndicators: false) {
@@ -40,6 +48,7 @@ struct MainPage: View {
                         // Score
 
                         HStack(spacing: 8) {
+
                             Spacer()
 
                             Image(systemName: "flame.fill")
@@ -50,14 +59,13 @@ struct MainPage: View {
 
                             Text("\(score)")
                                 .font(.system(size: 20, weight: .regular))
-                                .foregroundColor(Color(
-                                    red: 21.0 / 255.0,
-                                    green: 34.0 / 255.0,
-                                    blue: 246.0 / 255.0
-
-)
-)
-                            
+                                .foregroundColor(
+                                    Color(
+                                        red: 21.0 / 255.0,
+                                        green: 34.0 / 255.0,
+                                        blue: 246.0 / 255.0
+                                    )
+                                )
                         }
                         .padding(.horizontal, 28)
                         .padding(.top, 24)
@@ -99,7 +107,7 @@ struct MainPage: View {
                                 .offset(x: 24, y: -68)
                         }
                         .padding(.top, 43)
-                        .padding(.horizontal,29)
+                        .padding(.horizontal, 29)
 
                         // Skills Heading
 
@@ -116,9 +124,11 @@ struct MainPage: View {
                             .padding(.top, 35)
                             .padding(.bottom, 18)
 
-                        //* Glossy Skill Cards
+                        // MARK: Glossy Skill Cards
 
                         VStack(spacing: 14) {
+
+                            // Memory Cards
 
                             glossyCard(
                                 title: "Memory Cards",
@@ -128,7 +138,11 @@ struct MainPage: View {
                                     Color(red: 0.47, green: 0.47, blue: 0.96)
                                 ],
                                 height: cardHeight
-                            )
+                            ) {
+                                showMemoryGame = true
+                            }
+
+                            // Critical Thinking
 
                             glossyCard(
                                 title: "Critical Thinking",
@@ -138,7 +152,11 @@ struct MainPage: View {
                                     Color(red: 0.91, green: 0.45, blue: 0.13)
                                 ],
                                 height: cardHeight
-                            )
+                            ) {
+                                showCriticalThinkingGame = true
+                            }
+
+                            // Time Management
 
                             glossyCard(
                                 title: "Time Management",
@@ -148,7 +166,9 @@ struct MainPage: View {
                                     Color(red: 0.66, green: 0.85, blue: 0.46)
                                 ],
                                 height: cardHeight
-                            )
+                            ) {
+                                showTimeManagementGame = true
+                            }
                         }
                         .padding(.horizontal, 29)
                         .padding(.bottom, 20)
@@ -160,13 +180,57 @@ struct MainPage: View {
             .navigationBarBackButtonHidden(true)
             .frame(maxWidth: .infinity, maxHeight: .infinity)
         }
+
+        // MARK: - Present Memory Game
+
+        .fullScreenCover(isPresented: $showMemoryGame) {
+
+            MemoryGameScreen()
+        }
+
+        // MARK: - Present Critical Thinking Game
+
+        .fullScreenCover(isPresented: $showCriticalThinkingGame) {
+
+            CriticalThinkingGamePage(
+                onGameCompleted: { earnedProgress in
+
+                    print("Critical Thinking earned: \(earnedProgress)")
+
+                    gameProgress.completeCriticalThinkingGame(
+                        earnedProgress: earnedProgress
+                    )
+                }
+            )
+        }
+
+        // MARK: - Present Time Management Game
+
+        .fullScreenCover(isPresented: $showTimeManagementGame) {
+
+            PuzzleGameView(
+                onGameCompleted: { earnedProgress in
+
+                    print("Time Management earned: \(earnedProgress)")
+
+                    gameProgress.completeTimeManagementGame(
+                        earnedProgress: earnedProgress
+                    )
+                }
+            )
+        }
+
+        // MARK: - Skill Alert
+
         .alert("Let's play!", isPresented: $showAlert) {
+
             Button("OK", role: .cancel) { }
+
         } message: {
+
             Text("You selected \(selectedSkill).")
         }
     }
-    
 
     // MARK: Glossy Card Component
 
@@ -174,12 +238,14 @@ struct MainPage: View {
         title: String,
         icon: String,
         colors: [Color],
-        height: CGFloat
+        height: CGFloat,
+        action: @escaping () -> Void
     ) -> some View {
 
         Button {
-            selectedSkill = title
-            showAlert = true
+
+            action()
+
         } label: {
 
             HStack(spacing: 15) {
@@ -267,8 +333,10 @@ struct WaveShape: Shape {
 
         return path
     }
-
 }
+
 #Preview {
-    MainPage()
+    NavigationStack {
+        MainPage()
+    }
 }

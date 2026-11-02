@@ -5,16 +5,13 @@ struct MainPage2r: View {
 
     // MARK: - Navigation
 
+    @State private var showMemoryGame = false
     @State private var showTimeManagementGame = false
     @State private var showCriticalThinkingGame = false
 
     // MARK: - Shared Progress
 
     @StateObject private var gameProgress = GameProgress.shared
-
-    @State private var score = 0
-    @State private var selectedSkill = ""
-    @State private var showAlert = false
 
     // MARK: - Colors
 
@@ -259,91 +256,31 @@ struct MainPage2r: View {
                                 icon: "brain",
                                 color: memoryColor,
                                 height: cardHeight
-                            )
+                            ) {
+                                showMemoryGame = true
+                            }
 
                             // Critical Thinking - Orange
 
-                            Button {
-
+                            skillCard(
+                                title: "Critical Thinking",
+                                icon: "asterisk",
+                                color: thinkingColor,
+                                height: cardHeight
+                            ) {
                                 showCriticalThinkingGame = true
-
-                            } label: {
-
-                                HStack(spacing: 15) {
-
-                                    Image(systemName: "asterisk")
-                                        .font(
-                                            .system(
-                                                size: 26,
-                                                weight: .medium
-                                            )
-                                        )
-                                        .frame(width: 32)
-
-                                    Text("Critical Thinking")
-                                        .font(
-                                            .system(
-                                                size: 19,
-                                                weight: .medium
-                                            )
-                                        )
-                                        .lineLimit(1)
-                                        .minimumScaleFactor(0.75)
-
-                                    Spacer(minLength: 0)
-                                }
-                                .foregroundStyle(.white)
-                                .padding(.horizontal, 22)
-                                .frame(maxWidth: .infinity)
-                                .frame(height: cardHeight)
-                                .background(
-                                    RoundedRectangle(cornerRadius: 30)
-                                        .fill(thinkingColor)
-                                )
                             }
-                            .buttonStyle(.plain)
 
                             // Time Management - Green
 
-                            Button {
-
+                            skillCard(
+                                title: "Time Management",
+                                icon: "clock",
+                                color: timeColor,
+                                height: cardHeight
+                            ) {
                                 showTimeManagementGame = true
-
-                            } label: {
-
-                                HStack(spacing: 15) {
-
-                                    Image(systemName: "clock")
-                                        .font(
-                                            .system(
-                                                size: 26,
-                                                weight: .medium
-                                            )
-                                        )
-                                        .frame(width: 32)
-
-                                    Text("Time Management")
-                                        .font(
-                                            .system(
-                                                size: 19,
-                                                weight: .medium
-                                            )
-                                        )
-                                        .lineLimit(1)
-                                        .minimumScaleFactor(0.75)
-
-                                    Spacer(minLength: 0)
-                                }
-                                .foregroundStyle(.white)
-                                .padding(.horizontal, 22)
-                                .frame(maxWidth: .infinity)
-                                .frame(height: cardHeight)
-                                .background(
-                                    RoundedRectangle(cornerRadius: 30)
-                                        .fill(timeColor)
-                                )
                             }
-                            .buttonStyle(.plain)
                         }
                         .padding(.horizontal, 29)
                         .padding(.bottom, 25)
@@ -357,6 +294,13 @@ struct MainPage2r: View {
                 maxHeight: .infinity
             )
             .navigationBarBackButtonHidden(true)
+        }
+
+        // MARK: - Present Memory Cards Game (FULL SCREEN)
+
+        .fullScreenCover(isPresented: $showMemoryGame) {
+
+            MemoryGameScreen()
         }
 
         // MARK: - Present Critical Thinking Game (FULL SCREEN)
@@ -390,33 +334,19 @@ struct MainPage2r: View {
 
                     print("Time Management earned: \(earnedProgress)")
 
-                    GameProgress.shared.completeTimeManagementGame(
+                    gameProgress.completeTimeManagementGame(
                         earnedProgress: earnedProgress
                     )
 
                     print(
-                        "Updated Time Management: \(GameProgress.shared.timeProgress * 100)%"
+                        "Updated Time Management: \(gameProgress.timeProgress * 100)%"
                     )
 
                     print(
-                        "Updated Overall Progress: \(GameProgress.shared.overallProgress * 100)%"
+                        "Updated Overall Progress: \(gameProgress.overallProgress * 100)%"
                     )
                 }
             )
-        }
-
-        // MARK: - Skill Alert
-
-        .alert(
-            "Let's play!",
-            isPresented: $showAlert
-        ) {
-
-            Button("OK", role: .cancel) { }
-
-        } message: {
-
-            Text("You selected \(selectedSkill).")
         }
     }
 
@@ -489,13 +419,13 @@ struct MainPage2r: View {
         title: String,
         icon: String,
         color: Color,
-        height: CGFloat
+        height: CGFloat,
+        action: @escaping () -> Void
     ) -> some View {
 
         Button {
 
-            selectedSkill = title
-            showAlert = true
+            action()
 
         } label: {
 
